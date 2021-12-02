@@ -21,7 +21,8 @@ public class FamilyActivity extends AppCompatActivity {
         setContentView(mBinding.getRoot());
 
         // Initializing a Custom ArrayAdapter - WordAdapter to send Views to ListView.
-        WordAdapter wordAdapter = new WordAdapter(this, WordData.getLanguageCategory(2));
+        WordAdapter wordAdapter = new WordAdapter(this, WordData.getLanguageCategory(2),
+                R.color.category_family);
         mBinding.listWords.setAdapter(wordAdapter);
     }
 }

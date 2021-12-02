@@ -21,7 +21,8 @@ public class NumbersActivity extends AppCompatActivity {
         setContentView(mBinding.getRoot());
 
         // Initializing a Custom ArrayAdapter - WordAdapter to send Views to ListView.
-        WordAdapter wordAdapter = new WordAdapter(this, WordData.getLanguageCategory(1));
+        WordAdapter wordAdapter = new WordAdapter(this, WordData.getLanguageCategory(1),
+                R.color.category_numbers);
         mBinding.listWords.setAdapter(wordAdapter);
     }
 }

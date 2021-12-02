@@ -21,7 +21,8 @@ public class PhrasesActivity extends AppCompatActivity {
         setContentView(mBinding.getRoot());
 
         // Initializing a Custom ArrayAdapter - WordAdapter to send Views to ListView.
-        WordAdapter wordAdapter = new WordAdapter(this, WordData.getLanguageCategory(4));
+        WordAdapter wordAdapter = new WordAdapter(this, WordData.getLanguageCategory(4),
+                R.color.category_phrases);
         mBinding.listWords.setAdapter(wordAdapter);
     }
 }

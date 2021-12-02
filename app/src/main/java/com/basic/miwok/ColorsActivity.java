@@ -21,7 +21,8 @@ public class ColorsActivity extends AppCompatActivity {
         setContentView(mBinding.getRoot());
 
         // Initializing a Custom ArrayAdapter - WordAdapter to send Views to ListView.
-        WordAdapter wordAdapter = new WordAdapter(this, WordData.getLanguageCategory(3));
+        WordAdapter wordAdapter = new WordAdapter(this, WordData.getLanguageCategory(3),
+                R.color.category_colors);
         mBinding.listWords.setAdapter(wordAdapter);
     }
 }
