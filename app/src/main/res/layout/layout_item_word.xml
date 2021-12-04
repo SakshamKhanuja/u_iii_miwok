@@ -1,39 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_container"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_height"
     tools:background="@color/category_numbers">
 
-    <ImageView
-        android:id="@+id/image_view_word"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/tan_background"
-        android:contentDescription="@string/descriptionMiwokImage"
-        android:src="@drawable/number_one"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp">
+        android:background="?attr/selectableItemBackground">
 
-        <TextView
-            android:id="@+id/text_view_item_miwok"
-            style="@style/WordStyle"
-            android:gravity="bottom"
-            android:textStyle="bold"
-            tools:text="lutti" />
+        <ImageView
+            android:id="@+id/image_view_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/tan_background"
+            android:contentDescription="@string/descriptionMiwokImage"
+            android:src="@drawable/number_one"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-        <TextView
-            android:id="@+id/text_view_item_default"
-            style="@style/WordStyle"
-            tools:text="one" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_item_miwok"
+                style="@style/WordStyle"
+                android:gravity="bottom"
+                android:textStyle="bold"
+                tools:text="lutti" />
+
+            <TextView
+                android:id="@+id/text_view_item_default"
+                style="@style/WordStyle"
+                tools:text="one" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:contentDescription="@string/descriptionArrow"
+        android:src="@drawable/ic_play_arrow" />
+
+</RelativeLayout>

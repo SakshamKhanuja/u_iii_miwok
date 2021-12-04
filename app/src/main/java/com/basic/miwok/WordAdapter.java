@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,7 +51,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
         }
 
         // Set background color for Word container layout.
-        LinearLayout layoutContainer = itemView.findViewById(R.id.layout_container);
+        RelativeLayout layoutContainer = itemView.findViewById(R.id.layout_container);
         layoutContainer.setBackground(AppCompatResources.getDrawable(getContext(),
                 mBackgroundColorID));
 
@@ -72,11 +74,13 @@ public class WordAdapter extends ArrayAdapter<Word> {
 
             // Set Miwok Translation.
             TextView miwokTextView = itemView.findViewById(R.id.text_view_item_miwok);
-            miwokTextView.setText(currentlyViewedWord.getMiwokTranslation());
+            miwokTextView.setText(getContext().getString(
+                    currentlyViewedWord.getMiwokTranslation()));
 
             // Set Default Translation.
             TextView defaultTextView = itemView.findViewById(R.id.text_view_item_default);
-            defaultTextView.setText(currentlyViewedWord.getDefaultTranslation());
+            defaultTextView.setText(getContext().getString(
+                    currentlyViewedWord.getDefaultTranslation()));
         }
         return itemView;
     }

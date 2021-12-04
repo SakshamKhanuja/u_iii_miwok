@@ -5,26 +5,31 @@ package com.basic.miwok;
  */
 public class Word {
     // Default translation of a word.
-    private final String mDefaultTranslation;
+    private final int mDefaultTranslation;
 
     // Miwok translation of a word.
-    private final String mMiwokTranslation;
+    private final int mMiwokTranslation;
 
     // Word image resource ID.
     private int mImageResourceID;
 
+    // Word audio resource ID.
+    private final int mAudioResourceID;
+
     // Indicates whether this Word has an image associated with it or not.
     private boolean wordHasImage;
 
-    public Word(String mDefaultTranslation, String mMiwokTranslation) {
+    public Word(int mDefaultTranslation, int mMiwokTranslation, int mAudioResourceID) {
         this.mDefaultTranslation = mDefaultTranslation;
         this.mMiwokTranslation = mMiwokTranslation;
+        this.mAudioResourceID = mAudioResourceID;
         mImageResourceID = 0;
         wordHasImage = false;
     }
 
-    public Word(String mDefaultTranslation, String mMiwokTranslation, int mImageResourceID) {
-        this(mDefaultTranslation, mMiwokTranslation);
+    public Word(int mDefaultTranslation, int mMiwokTranslation, int mImageResourceID,
+                int mAudioResourceID) {
+        this(mDefaultTranslation, mMiwokTranslation, mAudioResourceID);
         this.mImageResourceID = mImageResourceID;
         wordHasImage = true;
     }
@@ -32,14 +37,14 @@ public class Word {
     /**
      * @return The default translation of the word.
      */
-    public String getDefaultTranslation() {
+    public int getDefaultTranslation() {
         return mDefaultTranslation;
     }
 
     /**
      * @return The Miwok translation of the word.
      */
-    public String getMiwokTranslation() {
+    public int getMiwokTranslation() {
         return mMiwokTranslation;
     }
 
@@ -48,6 +53,13 @@ public class Word {
      */
     public int getImageResourceID() {
         return mImageResourceID;
+    }
+
+    /**
+     * @return The Miwok audio resource ID associated with this Word.
+     */
+    public int getAudioResourceID() {
+        return mAudioResourceID;
     }
 
     /**
