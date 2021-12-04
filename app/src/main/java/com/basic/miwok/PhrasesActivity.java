@@ -1,5 +1,6 @@
 package com.basic.miwok;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 
 import com.basic.miwok.databinding.WordListBinding;
 
@@ -183,5 +185,16 @@ public class PhrasesActivity extends AppCompatActivity {
         } else {
             mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Making the "Up" Button behave like "Back" Button.
+        if(item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
