@@ -1,8 +1,5 @@
 package com.basic.miwok;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
@@ -10,15 +7,14 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 
-import com.basic.miwok.databinding.WordListBinding;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-public class NumbersActivity extends AppCompatActivity {
-
-    // Performs View Binding.
-    private WordListBinding mBinding;
+public class ColorsFragment extends Fragment {
 
     // Handles audio playing.
     private MediaPlayer mPlayer;
@@ -26,44 +22,43 @@ public class NumbersActivity extends AppCompatActivity {
     // Handles audio focus.
     private AudioManager mAudioManager;
 
+    // Shows a list of Words containing translation of colors.
+    private ListView mListView;
+
     /*
      * This listener is attached to AudioManager to request audio focus for devices running
      * Android Nougat (API 25) and earlier.
      */
     private final AudioManager.OnAudioFocusChangeListener mAudioFocusChangeListener =
             focusChange -> {
-                if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                if (focusChange == AudioManager.AUDIOFOCUS_LOSS ||
+                        focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ||
+                        focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
                     // No need to wait for audio focus, releasing all memory resources.
                     releaseMediaPlayer();
-                } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ||
-                        focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-                    // Can wait for audio focus, pausing the playback and seek to the start.
-                    mPlayer.pause();
-                    mPlayer.seekTo(0);
-                } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT ||
-                        focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                    // Focus gained resume playing the audio.
-                    mPlayer.start();
                 }
             };
 
     // Requests audio focus for devices running Android Oreo (API 26) and later.
     private AudioFocusRequest mAudioFocusRequest;
 
+    // Required Fragment
+    public ColorsFragment() {
+        super(R.layout.word_list);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mBinding = WordListBinding.inflate(
-                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
-        setContentView(mBinding.getRoot());
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         // Initializing AudioManager to request / abandon audio focus.
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) view.getContext().getSystemService(Context.AUDIO_SERVICE);
 
         // Initializing a Custom ArrayAdapter - WordAdapter to send Views to ListView.
-        WordAdapter wordAdapter = new WordAdapter(this, WordData.getLanguageCategory(1),
-                R.color.category_numbers);
-        mBinding.listWords.setAdapter(wordAdapter);
+        WordAdapter wordAdapter = new WordAdapter(getContext(), WordData.getLanguageCategory(3),
+                R.color.category_colors);
+        mListView = view.findViewById(R.id.list_words);
+        mListView.setAdapter(wordAdapter);
 
         // For devices running Android 8.0 (Oreo - API 26) and later.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -81,7 +76,7 @@ public class NumbersActivity extends AppCompatActivity {
      */
     private void playAudioForNougatAndBelow() {
         // Setting OnItemClickListener for ListView
-        mBinding.listWords.setOnItemClickListener(((parent, view, position, id) -> {
+        mListView.setOnItemClickListener(((parent, view, position, id) -> {
 
             // Release prev. resources
             releaseMediaPlayer();
@@ -92,7 +87,7 @@ public class NumbersActivity extends AppCompatActivity {
                     AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
                     == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                 // Prepare and start playing for clicked Word.
-                mPlayer = MediaPlayer.create(this, ((Word) parent.getItemAtPosition(position))
+                mPlayer = MediaPlayer.create(getContext(), ((Word) parent.getItemAtPosition(position))
                         .getAudioResourceID());
                 mPlayer.start();
                 mPlayer.setOnCompletionListener(player -> releaseMediaPlayer());
@@ -122,18 +117,11 @@ public class NumbersActivity extends AppCompatActivity {
 
             // Set listener if audio focus gets updated in between playing audio.
             builder.setOnAudioFocusChangeListener(focusChange -> {
-                if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                if (focusChange == AudioManager.AUDIOFOCUS_LOSS ||
+                        focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ||
+                        focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
                     // No need to wait for audio focus, releasing all memory resources.
                     releaseMediaPlayer();
-                } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ||
-                        focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-                    // Can wait for audio focus, pausing the playback and seek to the start.
-                    mPlayer.pause();
-                    mPlayer.seekTo(0);
-                } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT ||
-                        focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                    // Focus gained resume playing the audio.
-                    mPlayer.start();
                 }
             });
 
@@ -141,7 +129,7 @@ public class NumbersActivity extends AppCompatActivity {
             mAudioFocusRequest = builder.build();
 
             // Setting OnItemClickListener for ListView
-            mBinding.listWords.setOnItemClickListener(((parent, view, position, id) -> {
+            mListView.setOnItemClickListener(((parent, view, position, id) -> {
                 // Release prev. resources
                 releaseMediaPlayer();
 
@@ -150,7 +138,7 @@ public class NumbersActivity extends AppCompatActivity {
                         AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 
                     // Prepare and start playing for clicked Word.
-                    mPlayer = MediaPlayer.create(this,
+                    mPlayer = MediaPlayer.create(getContext(),
                             ((Word) parent.getItemAtPosition(position))
                                     .getAudioResourceID());
                     mPlayer.start();
@@ -163,7 +151,7 @@ public class NumbersActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
 
         releaseMediaPlayer();
@@ -184,16 +172,5 @@ public class NumbersActivity extends AppCompatActivity {
         } else {
             mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // Making the "Up" Button behave like "Back" Button.
-        if(item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
