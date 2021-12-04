@@ -1,46 +1,60 @@
 package com.basic.miwok;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
 import com.basic.miwok.databinding.ActivityMainBinding;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
-
-    // Performs View Binding.
-    private ActivityMainBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityMainBinding binding = ActivityMainBinding.inflate((LayoutInflater)
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+        setContentView(binding.getRoot());
 
-        mBinding = ActivityMainBinding.inflate(
-                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
-        setContentView(mBinding.getRoot());
+        // Setting elevation of ActionBar to 0dp.
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setElevation(0F);
+        }
 
-        // Registering a callback to open "ColorsActivity.java".
-        mBinding.textViewColors.setOnClickListener(view -> openActivity(ColorsActivity.class));
+        // Initializing Adapter to provide Word Category Fragments to ViewPager2.
+        WordCategoryAdapter adapter = new WordCategoryAdapter(getSupportFragmentManager(),
+                getLifecycle());
 
-        // Registering a callback to open "FamilyActivity.java".
-        mBinding.textViewFamily.setOnClickListener(view -> openActivity(FamilyActivity.class));
+        // Set adapter for ViewPager2.
+        binding.viewPager2.setAdapter(adapter);
 
-        // Registering a callback to open "NumbersActivity.java".
-        mBinding.textViewNumbers.setOnClickListener(view -> openActivity(NumbersActivity.class));
+        // Link ViewPager2 and TabLayout using TabLayoutMediator
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(binding.tabLayout,
+                binding.viewPager2, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText(R.string.category_numbers);
+                    break;
 
-        // Registering a callback to open "PhrasesActivity.java".
-        mBinding.textViewPhrases.setOnClickListener(view -> openActivity(PhrasesActivity.class));
-    }
+                case 1:
+                    tab.setText(R.string.category_family);
+                    break;
 
-    /**
-     * Opens Activity located in this app.
-     *
-     * @param activityClass is the Activity class which you want to open.
-     */
-    private void openActivity(Class<?> activityClass) {
-        startActivity(new Intent(this, activityClass));
+                case 2:
+                    tab.setText(R.string.category_colors);
+                    break;
+
+                case 3:
+                    tab.setText(R.string.category_phrases);
+                    break;
+            }
+        });
+
+        // Attach TabLayoutMediator to ViewPager2.
+        tabLayoutMediator.attach();
     }
 }
